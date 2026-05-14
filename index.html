@@ -8,157 +8,219 @@
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-  <div class="bg-grid"></div>
-  <div class="blob blob1"></div>
-  <div class="blob blob2"></div>
-  <div class="blob blob3"></div>
+  <div class="space"></div>
+  <div class="stars"></div>
+  <div class="glow glow-red"></div>
+  <div class="glow glow-purple"></div>
+  <div class="glow glow-blue"></div>
 
-  <main class="app">
-    <aside class="sidebar glass">
+  <main class="shell">
+    <aside class="sidebar slime-frame">
       <div class="brand">
-        <div class="logoBox">
-          <img src="./rpc-avatar.png" alt="RPC">
+        <div class="brand-logo">
+          <img src="./rpc-avatar.png" alt="RPC Logo">
         </div>
-        <div>
-          <h1>RPC</h1>
-          <p>ADMIN PANEL</p>
-        </div>
+        <h1>RPC</h1>
+        <p>ADMIN PANEL</p>
       </div>
 
-      <nav>
-        <button class="navBtn active" data-page="dashboard">✦ Главная</button>
-        <button class="navBtn" data-page="orders">◆ Заказы</button>
-        <button class="navBtn" data-page="workers">◇ Работники</button>
-        <button class="navBtn" data-page="notify">✉ Уведомления</button>
-        <button class="navBtn" data-page="settings">⚙ Настройки</button>
+      <nav class="nav">
+        <button class="nav-btn active" data-page="dashboard"><span>⌂</span>Главная</button>
+        <button class="nav-btn" data-page="orders"><span>◇</span>Заказы</button>
+        <button class="nav-btn" data-page="workers"><span>☷</span>Работники</button>
+        <button class="nav-btn" data-page="settings"><span>⚙</span>Настройки</button>
+        <button class="nav-btn" data-page="notify"><span>◔</span>Уведомления <b>3</b></button>
       </nav>
 
-      <div class="mini glass-soft">
-        <span>SERVER URL</span>
-        <input id="apiUrlInput" class="input small" />
-        <button id="saveApiUrlBtn" class="btn ghost full">Сохранить</button>
+      <div class="guardian">
+        <img src="./rpc-avatar.png" alt="RPC">
+        <div>
+          <b>RPC на страже</b>
+          <span>вашего проекта!</span>
+        </div>
       </div>
 
-      <button id="logoutBtn" class="btn danger full hidden">Выйти</button>
+      <div class="server-mini">
+        <label>SERVER URL</label>
+        <input id="apiUrlInput" />
+        <button id="saveApiUrlBtn">Сохранить</button>
+      </div>
+
+      <button id="logoutBtn" class="logout hidden">Выйти</button>
     </aside>
 
-    <section class="content">
+    <section class="main">
       <header class="topbar">
-        <div>
-          <h2 id="pageTitle">Панель управления</h2>
-          <p id="pageSubtitle">Сервер, заказы, база, Telegram и CRM в одном месте.</p>
+        <div class="search">
+          <span>⌕</span>
+          <input placeholder="Поиск по панели..." />
+          <kbd>Ctrl</kbd><kbd>K</kbd>
         </div>
-        <div class="topRight">
-          <div class="search">⌕ <input placeholder="Поиск..." /></div>
-          <div class="online"><i></i>ONLINE</div>
-          <div class="profile">
+        <div class="top-actions">
+          <div class="status-pill"><i></i>ONLINE</div>
+          <div class="owner-card">
             <img src="./rpc-avatar.png" alt="RPC">
-            <div><b id="profileName">Owner</b><span>RPC Control</span></div>
+            <div><b id="profileName">Владелец</b><span>owner@rpc.com</span></div>
+            <em>⌄</em>
           </div>
         </div>
       </header>
 
-      <section id="loginPage" class="loginPage">
-        <div class="loginCard glass">
-          <img src="./rpc-avatar.png" class="loginLogo" alt="RPC">
+      <section id="loginPage" class="login-page">
+        <div class="login-card slime-frame">
+          <img src="./rpc-avatar.png" alt="RPC">
           <h2>RPC OWNER LOGIN</h2>
-          <p>Войди owner / manager аккаунтом CRM, чтобы управлять сервером.</p>
-          <input id="username" class="input" placeholder="Логин CRM" />
-          <input id="password" class="input" type="password" placeholder="Пароль CRM" />
-          <button id="loginBtn" class="btn primary full">Войти в админку</button>
+          <p>Войди owner / manager аккаунтом CRM.</p>
+          <input id="username" placeholder="Логин CRM" />
+          <input id="password" type="password" placeholder="Пароль CRM" />
+          <button id="loginBtn">Войти в админку</button>
           <div id="loginError" class="error hidden"></div>
         </div>
       </section>
 
-      <section id="dashboardPage" class="page">
-        <div class="hero glass">
-          <div>
-            <span class="badge">RPC • REDPAD CREATOR</span>
-            <h2>Живой контроль сервера</h2>
-            <p>Панель в слайм-стиле для проверки Render, PostgreSQL, Telegram и заказов.</p>
-            <div class="actions">
-              <button id="refreshAllBtn" class="btn primary">Обновить всё</button>
-              <button id="openDocsBtn" class="btn ghost">Открыть /docs</button>
+      <section id="dashboardPage" class="page hidden">
+        <div class="stat-grid">
+          <article class="stat-card server">
+            <div class="slime-drip"></div>
+            <div>
+              <span>Сервер</span>
+              <h2 id="serverStatus">ONLINE</h2>
+              <p>Аптайм: 23д. 14ч. 52м.</p>
             </div>
-          </div>
-          <img src="./rpc-avatar.png" class="heroLogo" alt="RPC">
+            <button id="checkServerBtn">•••</button>
+          </article>
+
+          <article class="stat-card db">
+            <div class="slime-drip"></div>
+            <div>
+              <span>База данных</span>
+              <h2 id="dbStatus">PostgreSQL</h2>
+              <p id="dbInfo">Подключение успешно</p>
+            </div>
+            <button id="checkDbBtn">▣</button>
+          </article>
+
+          <article class="stat-card tg">
+            <div class="slime-drip"></div>
+            <div>
+              <span>Telegram</span>
+              <h2 id="telegramStatus">OK</h2>
+              <p>Бот активен</p>
+            </div>
+            <button id="testTelegramBtn">✈</button>
+          </article>
+
+          <article class="stat-card orders">
+            <div class="slime-drip"></div>
+            <div>
+              <span>Активные заказы</span>
+              <h2 id="ordersCount">12</h2>
+              <p>Из них новых: <b id="newCountInline">4</b></p>
+            </div>
+            <button id="quickLoadOrdersBtn">🛒</button>
+            <img class="corner-mascot" src="./rpc-avatar.png" alt="RPC">
+          </article>
         </div>
 
-        <div class="stats">
-          <div class="stat glass"><span>↯</span><p>Сервер</p><h3 id="serverStatus">—</h3><button id="checkServerBtn">Проверить</button></div>
-          <div class="stat glass"><span>▣</span><p>База данных</p><h3 id="dbStatus">—</h3><small id="dbInfo">PostgreSQL / SQLite</small><button id="checkDbBtn">Проверить</button></div>
-          <div class="stat glass"><span>✉</span><p>Telegram</p><h3 id="telegramStatus">—</h3><button id="testTelegramBtn">Тест</button></div>
-          <div class="stat glass"><span>◆</span><p>Активные заказы</p><h3 id="ordersCount">—</h3><button id="quickLoadOrdersBtn">Загрузить</button></div>
-        </div>
-
-        <div class="grid2">
-          <div class="panel glass">
-            <div class="panelHead"><h3>Последние заказы</h3><button id="dashboardLoadOrdersBtn" class="btn ghost sm">Обновить</button></div>
-            <div id="dashboardOrders" class="list"></div>
-          </div>
-
-          <div class="panel glass">
-            <h3>Быстрые действия</h3>
-            <div class="quick">
-              <button id="openApiBtn">API</button>
-              <button id="openMainSiteBtn">Основной сайт</button>
-              <button id="openPortalBtn">Личный кабинет</button>
-              <button id="openRenderBtn">Render</button>
+        <div class="dashboard-grid">
+          <section class="panel action-log">
+            <div class="panel-head">
+              <h3>⌁ Журнал действий</h3>
+              <button id="clearLogBtn">Очистить</button>
             </div>
-            <div class="summary">
-              <div><b id="todayCount">0</b><span>Сегодня</span></div>
-              <div><b id="newCount">0</b><span>Новые</span></div>
-              <div><b id="doneCount">0</b><span>Готово</span></div>
+            <div class="activity">
+              <div><i class="ok">✓</i><b>Новый заказ #7231 создан</b><span>2 мин назад</span><p>Пользователь @darkfire</p></div>
+              <div><i>♙</i><b>Работник подключился к заказу #7228</b><span>7 мин назад</span><p>Оптимизация VRChat Avatar</p></div>
+              <div><i class="warn">⚙</i><b>Настройки системы обновлены</b><span>15 мин назад</span><p>Изменены параметры уведомлений</p></div>
+              <div><i class="bad">⌫</i><b>Заказ #7215 отменён</b><span>28 мин назад</span><p>Пользователь @lamboy</p></div>
             </div>
-          </div>
-
-          <div class="panel glass wide">
-            <div class="panelHead"><h3>Журнал действий</h3><button id="clearLogBtn" class="btn ghost sm">Очистить</button></div>
             <pre id="logBox"></pre>
-          </div>
+          </section>
+
+          <section class="panel recent-orders">
+            <div class="panel-head">
+              <h3>⌁ Последние заказы</h3>
+              <button id="dashboardLoadOrdersBtn">Смотреть все</button>
+            </div>
+            <div class="table">
+              <div class="thead"><span>ID</span><span>Услуга</span><span>Пользователь</span><span>Сумма</span><span>Статус</span><span>Дата</span></div>
+              <div id="dashboardOrders" class="tbody"></div>
+            </div>
+          </section>
+
+          <section class="panel summary">
+            <div class="panel-head">
+              <h3>Сводка за сегодня</h3>
+              <button>Сегодня⌄</button>
+            </div>
+            <div class="summary-grid">
+              <div><i>▣</i><span>Заказы</span><b id="todayCount">24</b><small>+12%</small></div>
+              <div><i>₽</i><span>Выручка</span><b>18 450₽</b><small>+8%</small></div>
+              <div><i>☷</i><span>Пользователи</span><b>37</b><small>+15%</small></div>
+              <div><i>↗</i><span>Конверсия</span><b>68%</b><small>+5%</small></div>
+            </div>
+          </section>
+
+          <section class="panel team">
+            <div class="panel-head">
+              <h3>Работники</h3>
+              <button id="loadWorkersBtn">Управление</button>
+            </div>
+            <div id="workersPreview" class="team-grid">
+              <div><img src="./rpc-avatar.png" alt=""><b>RedPad</b><span>Администратор</span><em>ONLINE</em></div>
+              <div><img src="./rpc-avatar.png" alt=""><b>Ghost</b><span>Модератор</span><em>ONLINE</em></div>
+              <div><img src="./rpc-avatar.png" alt=""><b>Neon</b><span>Исполнитель</span><em class="busy">В РАБОТЕ</em></div>
+              <div><img src="./rpc-avatar.png" alt=""><b>Slime</b><span>Исполнитель</span><em class="off">OFFLINE</em></div>
+            </div>
+          </section>
+
+          <section class="panel quick-actions">
+            <img src="./rpc-avatar.png" class="peek" alt="RPC">
+            <h3>Быстрые действия</h3>
+            <div class="quick-grid">
+              <button id="openDocsBtn">▤<span>Открыть<br>/docs</span></button>
+              <button id="openApiBtn">⌘<span>API<br>Документация</span></button>
+              <button id="openMainSiteBtn">◎<span>Основной сайт</span></button>
+              <button id="openRenderBtn">⬢<span>Render<br>Панель проекта</span></button>
+            </div>
+          </section>
         </div>
       </section>
 
       <section id="ordersPage" class="page hidden">
-        <div class="sectionHead"><div><h2>Заказы</h2><p>Заявки клиентов и статусы.</p></div><button id="loadOrdersBtn" class="btn primary">Загрузить</button></div>
-        <div id="ordersList" class="cards"></div>
+        <div class="section-title"><h2>Заказы</h2><button id="loadOrdersBtn">Загрузить заказы</button></div>
+        <div id="ordersList" class="list-cards"></div>
       </section>
 
       <section id="workersPage" class="page hidden">
-        <div class="sectionHead"><div><h2>Работники</h2><p>Команда и роли CRM.</p></div><button id="loadWorkersBtn" class="btn primary">Загрузить</button></div>
-        <div id="workersList" class="cards"></div>
-      </section>
-
-      <section id="notifyPage" class="page hidden">
-        <div class="sectionHead"><div><h2>Уведомления</h2><p>Проверка Telegram уведомлений.</p></div><button id="notifyTelegramBtn" class="btn primary">Тест Telegram</button></div>
-        <div class="panel glass">
-          <h3>Telegram Bot</h3>
-          <p>Если TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID настроены в Render, сюда будет приходить тестовое уведомление.</p>
-          <div class="notifyPreview">🔥 <div><b>Новый заказ RPC</b><span>Клиент оставил заявку на сайте.</span></div></div>
-        </div>
+        <div class="section-title"><h2>Работники</h2><button id="loadWorkersFullBtn">Загрузить работников</button></div>
+        <div id="workersList" class="list-cards"></div>
       </section>
 
       <section id="settingsPage" class="page hidden">
-        <div class="sectionHead"><div><h2>Настройки</h2><p>Адреса сайтов и сервера.</p></div></div>
-        <div class="settings">
-          <div class="panel glass">
-            <label>CRM API URL</label><input id="settingsApiUrl" class="input" />
-            <label>Основной сайт</label><input id="settingsMainUrl" class="input" />
-            <label>Личный кабинет</label><input id="settingsPortalUrl" class="input" />
-            <label>Render Dashboard</label><input id="settingsRenderUrl" class="input" />
-            <button id="saveSettingsBtn" class="btn primary full">Сохранить</button>
+        <div class="section-title"><h2>Настройки</h2></div>
+        <div class="settings-grid">
+          <div class="panel settings-panel">
+            <label>CRM API URL</label><input id="settingsApiUrl">
+            <label>Основной сайт</label><input id="settingsMainUrl">
+            <label>Личный кабинет</label><input id="settingsPortalUrl">
+            <label>Render Dashboard</label><input id="settingsRenderUrl">
+            <button id="saveSettingsBtn">Сохранить настройки</button>
           </div>
-          <div class="panel glass">
-            <h3>Для Gumroad</h3>
-            <p>Это готовый static-site template. В ZIP лежит всё: HTML, CSS, JS, config и assets.</p>
-            <ul>
-              <li>index.html — сайт</li>
-              <li>style.css — слайм-дизайн</li>
-              <li>app.js — подключение к CRM API</li>
-              <li>config.js — ссылки</li>
-              <li>assets — аватарка</li>
-            </ul>
+          <div class="panel info-panel">
+            <h3>Структура архива</h3>
+            <p>Внутри одной папки лежат только файлы без вложенных папок.</p>
+            <code>index.html<br>style.css<br>app.js<br>config.js<br>rpc-avatar.png<br>README_RU.txt</code>
           </div>
+        </div>
+      </section>
+
+      <section id="notifyPage" class="page hidden">
+        <div class="section-title"><h2>Уведомления</h2><button id="notifyTelegramBtn">Тест Telegram</button></div>
+        <div class="panel notify-panel">
+          <h3>Telegram уведомления</h3>
+          <p>Проверка TELEGRAM_BOT_TOKEN и TELEGRAM_CHAT_ID на сервере.</p>
+          <div class="telegram-card"><b>🔥 Новый заказ RPC</b><span>Клиент оставил заявку на сайте.</span></div>
         </div>
       </section>
     </section>

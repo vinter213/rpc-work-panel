@@ -1,35 +1,40 @@
-RPC ADMIN PANEL — SLIME STYLE ONE FOLDER
-=======================================
+RPC ADMIN PANEL PREMIUM SLIME
+=============================
 
-Структура архива сделана специально для Gumroad:
+Структура архива:
 
-ZIP
-└── RPC_ADMIN_PANEL_SLIME_STYLE
-    ├── index.html
-    ├── style.css
-    ├── app.js
-    ├── config.js
-    ├── README_RU.txt
-    └── rpc-avatar.png
+RPC_ADMIN_PANEL_PREMIUM_SLIME/
+├── index.html
+├── style.css
+├── app.js
+├── config.js
+├── rpc-avatar.png
+└── README_RU.txt
 
-Внутри основной папки НЕТ дополнительных папок.
+Внутри папки нет других папок.
 
-Стиль:
-- тёмный киберпанк;
-- красно-фиолетовый неон;
-- слайм / jelly glassmorphism;
-- RPC аватарка череп-кот;
-- админ-панель для CRM сервера.
+Что изменено:
+- дизайн максимально приближен к референсу со слайм/jelly карточками;
+- тёмный cyberpunk фон;
+- красный, розовый, фиолетовый и синий неон;
+- левая панель RPC;
+- верхний поиск, ONLINE, owner card;
+- карточки Сервер / База / Telegram / Активные заказы;
+- Журнал действий;
+- Последние заказы;
+- Сводка за сегодня;
+- Работники;
+- Быстрые действия;
+- подключение к CRM API через config.js.
 
 Для Render Static Site:
-1. Открой папку RPC_ADMIN_PANEL_SLIME_STYLE.
-2. Загрузи файлы из неё в репозиторий или Render.
-3. Build Command:
-   echo no build
-4. Publish Directory:
-   .
+Build Command:
+echo no build
 
-В config.js уже стоит:
+Publish Directory:
+.
+
+В config.js уже указан сервер:
 https://rpc-team-crm.onrender.com
 
-Если сервер будет другой — поменяй RPC_API_URL.
+Если нужно поменять сервер — измени RPC_API_URL.
