@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RPC Admin Panel</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+
+  <main class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">RPC</div>
+        <div>
+          <h1>Admin Panel</h1>
+          <p>Server Control</p>
+        </div>
+      </div>
+
+      <nav>
+        <button class="nav-btn active" data-page="dashboard">Главная</button>
+        <button class="nav-btn" data-page="orders">Заказы</button>
+        <button class="nav-btn" data-page="workers">Работники</button>
+        <button class="nav-btn" data-page="settings">Настройки</button>
+      </nav>
+
+      <div class="side-card">
+        <p class="mini-title">API SERVER</p>
+        <input id="apiUrlInput" class="input mini-input" />
+        <button id="saveApiUrlBtn" class="ghost-btn">Сохранить URL</button>
+      </div>
+
+      <button id="logoutBtn" class="logout hidden">Выйти</button>
+    </aside>
+
+    <section class="content">
+      <section id="loginPage" class="login-card">
+        <div class="avatar-wrap">
+          <div class="avatar">☠</div>
+          <div class="pulse"></div>
+        </div>
+        <h2>RPC OWNER LOGIN</h2>
+        <p>Вход только для владельца / менеджера CRM.</p>
+        <input id="username" class="input" placeholder="Логин owner" />
+        <input id="password" class="input" type="password" placeholder="Пароль" />
+        <button id="loginBtn" class="primary-btn">Войти в админку</button>
+        <div id="loginError" class="error hidden"></div>
+      </section>
+
+      <section id="dashboardPage" class="page hidden">
+        <div class="topbar">
+          <div>
+            <h2>Панель управления сервером</h2>
+            <p>Проверяй Render, базу, Telegram и состояние CRM.</p>
+          </div>
+          <button id="refreshAllBtn" class="primary-btn small">Обновить всё</button>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <p class="mini-title">Сервер</p>
+            <h3 id="serverStatus">—</h3>
+            <button id="checkServerBtn" class="ghost-btn">Проверить</button>
+          </div>
+
+          <div class="card">
+            <p class="mini-title">База данных</p>
+            <h3 id="dbStatus">—</h3>
+            <p id="dbInfo" class="muted">—</p>
+            <button id="checkDbBtn" class="ghost-btn">Проверить БД</button>
+          </div>
+
+          <div class="card">
+            <p class="mini-title">Telegram</p>
+            <h3 id="telegramStatus">—</h3>
+            <p class="muted">Тест уведомления на телефон.</p>
+            <button id="testTelegramBtn" class="ghost-btn">Отправить тест</button>
+          </div>
+
+          <div class="card">
+            <p class="mini-title">Быстрые ссылки</p>
+            <div class="links">
+              <button id="openDocsBtn" class="link-btn">Открыть /docs</button>
+              <button id="openApiBtn" class="link-btn">Открыть API</button>
+              <button id="openMainSiteBtn" class="link-btn">Основной сайт</button>
+              <button id="openPortalBtn" class="link-btn">Личный кабинет</button>
+              <button id="openRenderBtn" class="link-btn">Render</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="wide-card">
+          <div class="wide-head">
+            <h3>Журнал действий</h3>
+            <button id="clearLogBtn" class="ghost-btn small">Очистить</button>
+          </div>
+          <pre id="logBox"></pre>
+        </div>
+      </section>
+
+      <section id="ordersPage" class="page hidden">
+        <div class="topbar">
+          <div>
+            <h2>Заказы</h2>
+            <p>Быстрый просмотр заказов с CRM сервера.</p>
+          </div>
+          <button id="loadOrdersBtn" class="primary-btn small">Загрузить</button>
+        </div>
+        <div id="ordersList" class="list"></div>
+      </section>
+
+      <section id="workersPage" class="page hidden">
+        <div class="topbar">
+          <div>
+            <h2>Работники</h2>
+            <p>Список пользователей CRM.</p>
+          </div>
+          <button id="loadWorkersBtn" class="primary-btn small">Загрузить</button>
+        </div>
+        <div id="workersList" class="list"></div>
+      </section>
+
+      <section id="settingsPage" class="page hidden">
+        <div class="topbar">
+          <div>
+            <h2>Настройки сайта-админки</h2>
+            <p>Тут меняется адрес сервера и ссылки.</p>
+          </div>
+        </div>
+
+        <div class="wide-card">
+          <label>CRM API URL</label>
+          <input id="settingsApiUrl" class="input" />
+          <label>Основной сайт</label>
+          <input id="settingsMainUrl" class="input" />
+          <label>Личный кабинет клиента</label>
+          <input id="settingsPortalUrl" class="input" />
+          <label>Render Dashboard</label>
+          <input id="settingsRenderUrl" class="input" />
+          <button id="saveSettingsBtn" class="primary-btn">Сохранить в браузере</button>
+          <p class="muted">Эти настройки сохраняются в браузере через localStorage. Для постоянного изменения на сайте поменяй config.js.</p>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <script src="./config.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
