@@ -1,9 +1,9 @@
-RPC ADMIN PANEL PREMIUM SLIME
-=============================
+RPC ADMIN PANEL — MAIN SITE STYLE
+=================================
 
 Структура архива:
 
-RPC_ADMIN_PANEL_PREMIUM_SLIME/
+RPC_ADMIN_PANEL_MAIN_SITE_STYLE/
 ├── index.html
 ├── style.css
 ├── app.js
@@ -13,19 +13,17 @@ RPC_ADMIN_PANEL_PREMIUM_SLIME/
 
 Внутри папки нет других папок.
 
-Что изменено:
-- дизайн максимально приближен к референсу со слайм/jelly карточками;
-- тёмный cyberpunk фон;
-- красный, розовый, фиолетовый и синий неон;
-- левая панель RPC;
-- верхний поиск, ONLINE, owner card;
-- карточки Сервер / База / Telegram / Активные заказы;
-- Журнал действий;
-- Последние заказы;
-- Сводка за сегодня;
-- Работники;
-- Быстрые действия;
-- подключение к CRM API через config.js.
+Что сделано:
+- стиль админки переделан под основной RPC Order Website;
+- тот же тёмный фон;
+- красно-фиолетовый неон;
+- большая hero-секция как на сайте;
+- аватарка RPC с glow;
+- карточки, кнопки, формы и панели в едином стиле;
+- подключение к CRM API сохранено;
+- логин через /auth/login;
+- проверка сервера, базы, Telegram;
+- заказы и работники с fallback demo-данными, если endpoint не отвечает.
 
 Для Render Static Site:
 Build Command:
@@ -34,7 +32,5 @@ echo no build
 Publish Directory:
 .
 
-В config.js уже указан сервер:
-https://rpc-team-crm.onrender.com
-
-Если нужно поменять сервер — измени RPC_API_URL.
+Настройка сервера:
+Открой config.js и поменяй RPC_API_URL, если сервер другой.

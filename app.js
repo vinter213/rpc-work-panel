@@ -13,8 +13,7 @@ function log(msg) {
 }
 
 function setInputs() {
-  $("apiUrlInput").value = API_URL;
-  if ($("settingsApiUrl")) $("settingsApiUrl").value = API_URL;
+  ["apiUrlInput", "settingsApiUrl"].forEach(id => { if ($(id)) $(id).value = API_URL; });
   if ($("settingsMainUrl")) $("settingsMainUrl").value = MAIN_URL;
   if ($("settingsPortalUrl")) $("settingsPortalUrl").value = PORTAL_URL;
   if ($("settingsRenderUrl")) $("settingsRenderUrl").value = RENDER_URL;
@@ -35,20 +34,20 @@ async function api(path, options = {}) {
 function showLogin() {
   $("loginPage").classList.remove("hidden");
   document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
-  $("logoutBtn").classList.add("hidden");
+  if ($("logoutBtn")) $("logoutBtn").classList.add("hidden");
 }
 
 function showApp() {
   $("loginPage").classList.add("hidden");
   $("dashboardPage").classList.remove("hidden");
-  $("logoutBtn").classList.remove("hidden");
+  if ($("logoutBtn")) $("logoutBtn").classList.remove("hidden");
 }
 
 function switchPage(page) {
   if (!token) return showLogin();
   document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
   $(`${page}Page`).classList.remove("hidden");
-  document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.page === page));
+  document.querySelectorAll(".nav-link").forEach(b => b.classList.toggle("active", b.dataset.page === page));
 }
 
 async function login() {
@@ -61,10 +60,7 @@ async function login() {
     return;
   }
   try {
-    const data = await api("/auth/login", {
-      method: "POST",
-      body: JSON.stringify({ username, password })
-    });
+    const data = await api("/auth/login", { method: "POST", body: JSON.stringify({ username, password }) });
     token = data.access_token;
     localStorage.setItem("RPC_ADMIN_TOKEN", token);
     $("profileName").textContent = username;
@@ -82,10 +78,12 @@ async function checkServer() {
     const res = await fetch(`${API_URL}/`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     $("serverStatus").textContent = "ONLINE";
-    log("Сервер ONLINE");
+    $("miniServerStatus").textContent = "ONLINE";
+    log("Сервер онлайн.");
   } catch (e) {
     $("serverStatus").textContent = "OFFLINE";
-    log(`Ошибка сервера: ${e.message}`);
+    $("miniServerStatus").textContent = "OFFLINE";
+    log(`Сервер ошибка: ${e.message}`);
   }
 }
 
@@ -93,12 +91,14 @@ async function checkDb() {
   try {
     const d = await api("/admin/database/status");
     $("dbStatus").textContent = d.persistent ? "PostgreSQL" : "SQLite";
+    $("miniDbStatus").textContent = d.persistent ? "POSTGRES" : "SQLITE";
     $("dbInfo").textContent = d.persistent ? "Подключение успешно" : "DATABASE_URL не подключен";
     log(`База: ${JSON.stringify(d)}`);
   } catch (e) {
     $("dbStatus").textContent = "ERROR";
+    $("miniDbStatus").textContent = "ERROR";
     $("dbInfo").textContent = e.message;
-    log(`Ошибка БД: ${e.message}`);
+    log(`БД ошибка: ${e.message}`);
   }
 }
 
@@ -106,102 +106,97 @@ async function testTelegram() {
   try {
     const d = await api("/admin/telegram/test", { method: "POST", body: JSON.stringify({}) });
     $("telegramStatus").textContent = "OK";
-    log(`Telegram OK: ${JSON.stringify(d)}`);
+    log(`Telegram тест: ${JSON.stringify(d)}`);
   } catch (e) {
     $("telegramStatus").textContent = "ERROR";
     log(`Telegram ошибка: ${e.message}`);
   }
 }
 
-function fallbackOrders() {
+function demoOrders() {
   return [
-    { id: 7231, service: "Optimization", client_name: "@darkfire", price: "700 ₽", status: "НОВЫЙ", date: "2 мин назад" },
-    { id: 7230, service: "Avatar Upload", client_name: "@neonwave", price: "500 ₽", status: "В РАБОТЕ", date: "15 мин назад" },
-    { id: 7229, service: "Quest Adaptation", client_name: "@quantum", price: "1 000 ₽", status: "ВЫПОЛНЕНО", date: "42 мин назад" },
-    { id: 7228, service: "Shading / FX", client_name: "@pixelghost", price: "1 500 ₽", status: "В РАБОТЕ", date: "1 ч назад" },
-    { id: 7227, service: "World / Unity", client_name: "@vr_soul", price: "3 000 ₽", status: "НОВЫЙ", date: "2 ч назад" }
+    { id: 7231, service: "VRChat Avatar", client_name: "@darkfire", price: "700 ₽", status: "НОВЫЙ" },
+    { id: 7230, service: "Avatar Upload", client_name: "@neonwave", price: "500 ₽", status: "В РАБОТЕ" },
+    { id: 7229, service: "Quest Adaptation", client_name: "@quantum", price: "1 000 ₽", status: "ВЫПОЛНЕНО" },
+    { id: 7228, service: "World / Unity", client_name: "@vr_soul", price: "3 000 ₽", status: "НОВЫЙ" }
   ];
 }
 
-function renderDashboardOrders(arr) {
-  const box = $("dashboardOrders");
-  box.innerHTML = arr.slice(0, 6).map(o => `
+function renderOrders(arr) {
+  $("dashboardOrders").innerHTML = arr.map(o => `
     <div class="row">
       <span>#${o.id || "—"}</span>
       <span>${o.service || o.title || o.name || "RPC Order"}</span>
       <span>${o.client_name || o.client || o.username || "@client"}</span>
       <span>${o.price || o.budget || "—"}</span>
       <span><em class="tag">${o.status || "НОВЫЙ"}</em></span>
-      <span>${o.date || o.created_at || "сейчас"}</span>
     </div>
   `).join("");
+
+  const list = $("ordersList");
+  if (list) {
+    list.innerHTML = arr.map(o => `
+      <div class="card-item">
+        <h3>#${o.id || "—"} ${o.service || o.title || o.name || "RPC Order"}</h3>
+        <p>${o.client_name || o.client || "Клиент"} • ${o.price || o.budget || "—"}</p>
+        <span class="tag">${o.status || "НОВЫЙ"}</span>
+      </div>
+    `).join("");
+  }
 }
 
 async function loadOrders() {
   try {
     let d;
     try { d = await api("/orders"); } catch { d = await api("/public/queue"); }
-    const arr = (Array.isArray(d) ? d : (d.orders || []));
-    const orders = arr.length ? arr : fallbackOrders();
-
+    const arr = Array.isArray(d) ? d : (d.orders || []);
+    const orders = arr.length ? arr : demoOrders();
     $("ordersCount").textContent = orders.length;
+    $("miniOrdersStatus").textContent = "SYNC";
     $("todayCount").textContent = orders.length;
-    $("newCountInline").textContent = orders.filter(x => String(x.status || "").toLowerCase().includes("new") || String(x.status || "").toLowerCase().includes("нов")).length || 4;
-    renderDashboardOrders(orders);
-
-    const list = $("ordersList");
-    if (list) {
-      list.innerHTML = orders.map(o => `
-        <div class="card-item">
-          <div>
-            <h3>#${o.id || "—"} ${o.service || o.title || o.name || "RPC Order"}</h3>
-            <p>${o.client_name || o.client || ""} • ${o.date || o.created_at || ""}</p>
-          </div>
-          <span class="tag">${o.status || "НОВЫЙ"}</span>
-        </div>
-      `).join("");
-    }
+    $("newCount").textContent = orders.filter(x => String(x.status || "").toLowerCase().includes("new") || String(x.status || "").toLowerCase().includes("нов")).length;
+    $("doneCount").textContent = orders.filter(x => String(x.status || "").toLowerCase().includes("done") || String(x.status || "").toLowerCase().includes("готов") || String(x.status || "").toLowerCase().includes("выполн")).length;
+    renderOrders(orders);
     log(`Заказы загружены: ${orders.length}`);
   } catch (e) {
-    const orders = fallbackOrders();
-    renderDashboardOrders(orders);
+    const orders = demoOrders();
+    renderOrders(orders);
     $("ordersCount").textContent = orders.length;
-    log(`Заказы показаны демо, API ошибка: ${e.message}`);
+    log(`Показаны демо-заказы, API ошибка: ${e.message}`);
   }
 }
 
 async function loadWorkers() {
   const demo = [
-    { username: "RedPad", role: "Администратор" },
-    { username: "Ghost", role: "Модератор" },
-    { username: "Neon", role: "Исполнитель" },
-    { username: "Slime", role: "Исполнитель" }
+    { username: "RedPad", role: "Администратор", status: "ONLINE" },
+    { username: "Ghost", role: "Модератор", status: "ONLINE" },
+    { username: "Neon", role: "Исполнитель", status: "В РАБОТЕ" },
+    { username: "Slime", role: "Исполнитель", status: "OFFLINE" }
   ];
-
+  const list = $("workersList");
   try {
     let d;
     try { d = await api("/users"); } catch { d = await api("/workers"); }
-    const arr = (Array.isArray(d) ? d : (d.users || d.workers || []));
-    renderWorkers(arr.length ? arr : demo);
-    log(`Работники загружены: ${(arr.length ? arr : demo).length}`);
-  } catch (e) {
-    renderWorkers(demo);
-    log(`Работники демо, API ошибка: ${e.message}`);
-  }
-}
-
-function renderWorkers(arr) {
-  const list = $("workersList");
-  if (!list) return;
-  list.innerHTML = arr.map(u => `
-    <div class="card-item">
-      <div>
+    const arr = Array.isArray(d) ? d : (d.users || d.workers || []);
+    const workers = arr.length ? arr : demo;
+    list.innerHTML = workers.map(u => `
+      <div class="card-item">
         <h3>${u.name || u.username || "Worker"}</h3>
-        <p>${u.role || "worker"}</p>
+        <p>${u.email || u.role || "worker"}</p>
+        <span class="tag">${u.status || u.role || "worker"}</span>
       </div>
-      <span class="tag">${u.status || "ONLINE"}</span>
-    </div>
-  `).join("");
+    `).join("");
+    log(`Работники загружены: ${workers.length}`);
+  } catch (e) {
+    list.innerHTML = demo.map(u => `
+      <div class="card-item">
+        <h3>${u.username}</h3>
+        <p>${u.role}</p>
+        <span class="tag">${u.status}</span>
+      </div>
+    `).join("");
+    log(`Показаны демо-работники, API ошибка: ${e.message}`);
+  }
 }
 
 async function refreshAll() {
@@ -220,7 +215,7 @@ function saveSettings() {
   localStorage.setItem("RPC_CLIENT_PORTAL_URL", PORTAL_URL);
   localStorage.setItem("RPC_RENDER_DASHBOARD_URL", RENDER_URL);
   setInputs();
-  log("Настройки сохранены");
+  log("Настройки сохранены.");
 }
 
 function bind() {
@@ -233,9 +228,7 @@ function bind() {
     showLogin();
   };
 
-  document.querySelectorAll(".nav-btn").forEach(btn => {
-    btn.onclick = () => switchPage(btn.dataset.page);
-  });
+  document.querySelectorAll(".nav-link").forEach(btn => btn.onclick = () => switchPage(btn.dataset.page));
 
   $("saveApiUrlBtn").onclick = () => {
     API_URL = $("apiUrlInput").value.trim().replace(/\/$/, "");
@@ -248,25 +241,26 @@ function bind() {
   $("checkDbBtn").onclick = checkDb;
   $("testTelegramBtn").onclick = testTelegram;
   $("notifyTelegramBtn").onclick = testTelegram;
+  $("refreshAllBtn").onclick = refreshAll;
   $("quickLoadOrdersBtn").onclick = loadOrders;
   $("dashboardLoadOrdersBtn").onclick = loadOrders;
   $("loadOrdersBtn").onclick = loadOrders;
   $("loadWorkersBtn").onclick = loadWorkers;
-  $("loadWorkersFullBtn").onclick = loadWorkers;
   $("clearLogBtn").onclick = () => $("logBox").textContent = "";
   $("saveSettingsBtn").onclick = saveSettings;
 
   $("openDocsBtn").onclick = () => window.open(`${API_URL}/docs`, "_blank");
   $("openApiBtn").onclick = () => window.open(API_URL, "_blank");
   $("openMainSiteBtn").onclick = () => window.open(MAIN_URL, "_blank");
+  $("openPortalBtn").onclick = () => window.open(PORTAL_URL, "_blank");
   $("openRenderBtn").onclick = () => window.open(RENDER_URL, "_blank");
 
+  renderOrders(demoOrders());
   if (token) {
     showApp();
     refreshAll();
   } else {
     showLogin();
-    renderDashboardOrders(fallbackOrders());
   }
 }
 
