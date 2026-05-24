@@ -1,51 +1,28 @@
-RPC OWNER / WORKER WEB PANEL — FLAT GITHUB FILES
+RPC OWNER/WORKER WEB PANEL - NAV FIX
 
-Это файлы для репозитория rpc-admin-panel.
-Папки создавать не надо. Просто закинь все файлы в корень GitHub.
+Это плоский комплект файлов для GitHub. Папок внутри нет.
 
-Файлы:
-- index.html
-- style.css
-- app.js
-- config.js
-- rpc-avatar.png
+Что исправлено:
+- боковое меню теперь реально переключает разделы;
+- Dashboard, Orders, Workers, Clients, Tasks, Telegram, Settings — отдельные экраны;
+- поиск работает в Orders;
+- кнопки View all открывают нужные разделы;
+- Telegram/Database/Sync Owner вынесены в рабочие разделы;
+- дизайн оставлен в неоновом RPC стиле;
+- аватарка rpc-avatar.png подключена в интерфейс.
 
-Что удалить/заменить в rpc-admin-panel:
-- index.html
-- style.css
-- app.js
-- config.js
+Куда заливать:
+Репозиторий rpc-admin-panel, прямо в корень.
 
-Потом загрузи новые файлы из этого архива в корень репозитория.
+Заменить файлы:
+index.html
+style.css
+app.js
+config.js
+rpc-avatar.png
 
-ВАЖНО:
-В config.js проверь backend:
-window.RPC_CONFIG = {
-  API_URL: "https://rpc-team-crm.onrender.com"
-};
-
-Если backend называется иначе — поменяй ссылку.
-
-Backend должен иметь endpoints V3:
-POST /auth/login
-POST /auth/register
-GET /orders
-PATCH /orders/{id}/status
-PATCH /orders/{id}/assign
-GET /users
-PATCH /users/{id}/approve
-PATCH /users/{id}/active
-PATCH /users/{id}/role
-GET /tasks
-POST /tasks
-PATCH /tasks/{id}/status
-POST /admin/telegram/test
-GET /admin/database/status
-POST /admin/sync-owner
-
-Owner через Render Environment Variables:
-RPC_OWNER_EMAILS=daniel134745@gmail.com
-RPC_OWNER_USERNAMES=ViNter,vinter
-RPC_AUTO_OWNER_PASSWORD=твой_пароль
-RPC_DEFAULT_OWNER_NAME=ViNter
-RPC_FIRST_USER_OWNER=false
+После загрузки:
+1. Сделай deploy rpc-admin-panel.
+2. Открой сайт.
+3. Нажми слева Orders / Workers / Tasks / Telegram / Settings.
+Теперь они должны переключать экраны, а не быть затычками.

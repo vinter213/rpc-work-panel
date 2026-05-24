@@ -2,251 +2,114 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>RPC Team CRM — Owner / Workers</title>
   <link rel="icon" href="rpc-avatar.png" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="bg">
-    <div class="orb orb-a"></div>
-    <div class="orb orb-b"></div>
-    <div class="grid"></div>
-    <div class="scanline"></div>
-    <div id="particles"></div>
-  </div>
+  <div class="bg-noise"></div>
+  <div class="bg-grid"></div>
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
 
-  <main id="app" class="app-shell">
-    <section id="authScreen" class="auth-screen">
-      <div class="auth-card glass tilt-card">
-        <div class="brand-block">
-          <div class="logo-ring big">
-            <img src="rpc-avatar.png" alt="RPC avatar" />
-          </div>
-          <div>
-            <h1>RPC Team CRM</h1>
-            <p>Owner / Worker web panel</p>
-          </div>
-        </div>
-
-        <div class="auth-tabs">
-          <button class="tab-btn active" data-auth-tab="login">Вход</button>
-          <button class="tab-btn" data-auth-tab="register">Регистрация</button>
-        </div>
-
-        <form id="loginForm" class="auth-form">
-          <label>
-            <span>Email или username</span>
-            <input id="loginUsername" autocomplete="username" placeholder="daniel134745@gmail.com" required />
-          </label>
-          <label>
-            <span>Пароль</span>
-            <input id="loginPassword" type="password" autocomplete="current-password" placeholder="••••••••" required />
-          </label>
-          <button class="primary-btn" type="submit">Войти в панель</button>
-        </form>
-
-        <form id="registerForm" class="auth-form hidden">
-          <label>
-            <span>Имя</span>
-            <input id="regName" placeholder="ViNter" required />
-          </label>
-          <label>
-            <span>Email</span>
-            <input id="regEmail" type="email" placeholder="mail@example.com" required />
-          </label>
-          <label>
-            <span>Username</span>
-            <input id="regUsername" placeholder="vinter" required />
-          </label>
-          <label>
-            <span>Пароль</span>
-            <input id="regPassword" type="password" placeholder="минимум 6 символов" required />
-          </label>
-          <button class="primary-btn" type="submit">Создать worker аккаунт</button>
-          <p class="hint">Owner создаётся автоматически через Environment Variables на backend.</p>
-        </form>
-
-        <div id="authMessage" class="message"></div>
+  <main id="authScreen" class="auth-screen hidden">
+    <section class="auth-card glass">
+      <img class="auth-logo" src="rpc-avatar.png" alt="RPC" />
+      <h1>RPC Team CRM</h1>
+      <p>Owner / Worker web panel</p>
+      <div class="tabs">
+        <button class="tab active" data-auth="login">Вход</button>
+        <button class="tab" data-auth="register">Регистрация</button>
       </div>
-
-      <aside class="auth-preview glass">
-        <div class="preview-top">
-          <span class="live-dot"></span>
-          <span>LIVE SYNC</span>
-        </div>
-        <h2>Все обновления теперь через сайт</h2>
-        <p>Заявки, рабочие, статусы, Telegram и задачи синхронизируются с сервером.</p>
-        <div class="mini-bars">
-          <i></i><i></i><i></i><i></i><i></i>
-        </div>
-      </aside>
-    </section>
-
-    <section id="dashboardScreen" class="dashboard hidden">
-      <aside class="sidebar glass">
-        <div class="sidebar-brand">
-          <div class="logo-ring">
-            <img src="rpc-avatar.png" alt="RPC avatar" />
-          </div>
-          <div>
-            <h2>RPC TEAM</h2>
-            <p>Control. Manage. Dominate.</p>
-          </div>
-        </div>
-
-        <nav class="nav">
-          <button class="nav-item active" data-view="dashboard">⌂ <span>Dashboard</span></button>
-          <button class="nav-item" data-view="orders">▣ <span>Orders</span></button>
-          <button class="nav-item" data-view="workers">☷ <span>Workers</span></button>
-          <button class="nav-item" data-view="tasks">☑ <span>Tasks</span></button>
-          <button class="nav-item" data-view="telegram">✈ <span>Telegram</span></button>
-          <button class="nav-item" data-view="settings">⚙ <span>Settings</span></button>
-        </nav>
-
-        <div class="system-card">
-          <div><span class="live-dot"></span> SYSTEM STATUS</div>
-          <strong id="systemStatus">Checking...</strong>
-          <div class="wave"></div>
-        </div>
-      </aside>
-
-      <section class="main-panel">
-        <header class="topbar">
-          <div class="search-wrap">
-            <span>⌕</span>
-            <input id="searchInput" placeholder="Search orders, workers, clients..." />
-            <kbd>Ctrl K</kbd>
-          </div>
-          <button id="syncOwnerBtn" class="ghost-btn owner-only">♛ Sync Owner</button>
-          <button id="refreshBtn" class="ghost-btn">↻ Refresh</button>
-          <div class="profile-pill">
-            <img src="rpc-avatar.png" alt="" />
-            <div>
-              <b id="profileName">RPC User</b>
-              <small id="profileRole">Online</small>
-            </div>
-            <button id="logoutBtn" title="Выйти">⎋</button>
-          </div>
-        </header>
-
-        <section class="hero glass">
-          <div>
-            <p class="eyebrow">OWNER / WORKER PANEL</p>
-            <h1 id="welcomeTitle">Welcome back</h1>
-            <p>Живая панель для заказов, рабочих, задач и Telegram-уведомлений.</p>
-          </div>
-          <div class="clock">
-            <span id="dayLabel">ONLINE</span>
-            <strong id="clockText">00:00</strong>
-          </div>
-        </section>
-
-        <section class="stats-grid">
-          <article class="stat-card glass hot">
-            <span class="stat-icon">▣</span>
-            <p>Total orders</p>
-            <h3 id="statOrders">0</h3>
-            <small>auto synced</small>
-          </article>
-          <article class="stat-card glass purple">
-            <span class="stat-icon">☷</span>
-            <p>Workers</p>
-            <h3 id="statWorkers">0</h3>
-            <small>team online</small>
-          </article>
-          <article class="stat-card glass pink">
-            <span class="stat-icon">☑</span>
-            <p>Tasks</p>
-            <h3 id="statTasks">0</h3>
-            <small>open / active</small>
-          </article>
-          <article class="stat-card glass green">
-            <span class="stat-icon">●</span>
-            <p>Server</p>
-            <h3 id="statServer">...</h3>
-            <small id="serverVersion">checking</small>
-          </article>
-        </section>
-
-        <section class="content-grid">
-          <article class="panel glass wide" data-panel="orders">
-            <div class="panel-head">
-              <h2>Recent Orders</h2>
-              <div class="row-actions">
-                <select id="statusFilter">
-                  <option value="">All statuses</option>
-                  <option value="new">New</option>
-                  <option value="in_progress">In progress</option>
-                  <option value="completed">Completed</option>
-                  <option value="cancelled">Cancelled</option>
-                </select>
-                <button id="createOrderBtn" class="mini-btn owner-manager-only">+ Order</button>
-              </div>
-            </div>
-            <div id="ordersList" class="orders-list"></div>
-          </article>
-
-          <article class="panel glass" data-panel="workers">
-            <div class="panel-head">
-              <h2>Workers Status</h2>
-              <button id="loadUsersBtn" class="mini-btn owner-manager-only">Reload</button>
-            </div>
-            <div id="workersList" class="workers-list"></div>
-          </article>
-
-          <article class="panel glass" data-panel="tasks">
-            <div class="panel-head">
-              <h2>Tasks</h2>
-              <button id="createTaskBtn" class="mini-btn owner-manager-only">+ Task</button>
-            </div>
-            <div id="tasksList" class="tasks-list"></div>
-          </article>
-
-          <article class="panel glass" data-panel="actions">
-            <div class="panel-head">
-              <h2>Quick Actions</h2>
-            </div>
-            <div class="quick-grid">
-              <button id="telegramTestBtn" class="quick-card owner-only">✈<span>Telegram test</span></button>
-              <button id="dbStatusBtn" class="quick-card owner-only">◉<span>Database</span></button>
-              <button id="copyApiBtn" class="quick-card">⛓<span>Copy API URL</span></button>
-              <button id="hardRefreshBtn" class="quick-card">↻<span>Hard refresh</span></button>
-            </div>
-            <div id="actionMessage" class="message"></div>
-          </article>
-        </section>
-      </section>
+      <form id="loginForm" class="form">
+        <input id="loginUsername" placeholder="Email или username" autocomplete="username" required />
+        <input id="loginPassword" placeholder="Пароль" type="password" autocomplete="current-password" required />
+        <button class="primary" type="submit">Войти</button>
+      </form>
+      <form id="registerForm" class="form hidden">
+        <input id="regName" placeholder="Имя" required />
+        <input id="regUsername" placeholder="Username" required />
+        <input id="regEmail" placeholder="Email" type="email" required />
+        <input id="regPassword" placeholder="Пароль" type="password" required />
+        <button class="primary" type="submit">Создать аккаунт</button>
+      </form>
+      <div id="authMsg" class="msg"></div>
     </section>
   </main>
 
-  <dialog id="orderModal" class="modal glass">
-    <form method="dialog" id="orderForm">
-      <h2>Создать заказ</h2>
-      <input id="orderClientName" placeholder="Имя клиента" required />
-      <input id="orderContact" placeholder="Discord / Telegram / Email" />
-      <input id="orderService" placeholder="Услуга" required />
-      <input id="orderBudget" placeholder="Бюджет" />
-      <textarea id="orderDescription" placeholder="Описание"></textarea>
-      <div class="modal-actions">
-        <button value="cancel" class="ghost-btn">Отмена</button>
-        <button class="primary-btn" value="default">Создать</button>
+  <main id="appScreen" class="app hidden">
+    <aside class="sidebar glass">
+      <div class="brand">
+        <div class="logo-shell"><img src="rpc-avatar.png" alt="RPC" /></div>
+        <h2>RPC TEAM</h2>
+        <p>Control. Manage. Dominate.</p>
       </div>
-    </form>
-  </dialog>
+      <nav class="nav" id="sideNav">
+        <button class="nav-item active" data-view="dashboard"><span>⌂</span>Dashboard</button>
+        <button class="nav-item" data-view="orders"><span>▣</span>Orders</button>
+        <button class="nav-item" data-view="workers"><span>☷</span>Workers</button>
+        <button class="nav-item" data-view="clients"><span>♙</span>Clients</button>
+        <button class="nav-item" data-view="tasks"><span>☑</span>Tasks</button>
+        <button class="nav-item" data-view="telegram"><span>✈</span>Telegram</button>
+        <button class="nav-item" data-view="settings"><span>⚙</span>Settings</button>
+      </nav>
+      <div class="system glass-lite">
+        <b><i class="dot"></i> SYSTEM STATUS</b>
+        <strong id="systemStatus">Checking...</strong>
+        <div class="mini-wave"></div>
+      </div>
+    </aside>
 
-  <dialog id="taskModal" class="modal glass">
-    <form method="dialog" id="taskForm">
-      <h2>Создать задачу</h2>
-      <input id="taskTitle" placeholder="Название задачи" required />
-      <textarea id="taskDescription" placeholder="Описание"></textarea>
-      <select id="taskAssignee"></select>
-      <div class="modal-actions">
-        <button value="cancel" class="ghost-btn">Отмена</button>
-        <button class="primary-btn" value="default">Создать</button>
-      </div>
-    </form>
-  </dialog>
+    <section class="workspace">
+      <header class="topbar">
+        <label class="search glass-lite">⌕<input id="searchInput" placeholder="Search orders, workers, clients..." /><kbd>Ctrl K</kbd></label>
+        <button id="syncOwnerBtn" class="btn owner-only">♛ Sync Owner</button>
+        <button id="refreshBtn" class="btn">↻ Refresh</button>
+        <div class="profile glass-lite">
+          <img src="rpc-avatar.png" alt="" />
+          <div><b id="profileName">RPC User</b><small id="profileRole">Online</small></div>
+          <button id="logoutBtn" title="Выйти">⎋</button>
+        </div>
+      </header>
+
+      <section class="hero glass">
+        <div>
+          <p id="viewEyebrow" class="eyebrow">OWNER / WORKER PANEL</p>
+          <h1 id="viewTitle">Welcome back</h1>
+          <p id="viewSubtitle">Живая панель для заказов, рабочих, задач и Telegram-уведомлений.</p>
+        </div>
+        <div class="clock"><span id="dayLabel">ONLINE</span><strong id="clockText">00:00</strong></div>
+      </section>
+
+      <section class="stats-grid">
+        <article class="stat glass hot"><span>▣</span><p>Total orders</p><h3 id="statOrders">0</h3><small>auto synced</small></article>
+        <article class="stat glass purple"><span>☷</span><p>Workers</p><h3 id="statWorkers">0</h3><small>team online</small></article>
+        <article class="stat glass pink"><span>☑</span><p>Tasks</p><h3 id="statTasks">0</h3><small>open / active</small></article>
+        <article class="stat glass green"><span>●</span><p>Server</p><h3 id="statServer">...</h3><small id="serverVersion">checking</small></article>
+      </section>
+
+      <section id="viewRoot" class="view-root"></section>
+    </section>
+  </main>
+
+  <dialog id="orderModal" class="modal glass"><form id="orderForm" method="dialog">
+    <h2>Создать заказ</h2>
+    <input id="orderClientName" placeholder="Имя клиента" required />
+    <input id="orderContact" placeholder="Discord / Telegram / Email" />
+    <input id="orderService" placeholder="Услуга" required />
+    <input id="orderBudget" placeholder="Бюджет" />
+    <textarea id="orderDescription" placeholder="Описание"></textarea>
+    <div class="modal-actions"><button class="btn" value="cancel">Отмена</button><button class="primary" value="default">Создать</button></div>
+  </form></dialog>
+
+  <dialog id="taskModal" class="modal glass"><form id="taskForm" method="dialog">
+    <h2>Создать задачу</h2>
+    <input id="taskTitle" placeholder="Название задачи" required />
+    <textarea id="taskDescription" placeholder="Описание"></textarea>
+    <select id="taskAssignee"></select>
+    <div class="modal-actions"><button class="btn" value="cancel">Отмена</button><button class="primary" value="default">Создать</button></div>
+  </form></dialog>
 
   <script src="config.js"></script>
   <script src="app.js"></script>
