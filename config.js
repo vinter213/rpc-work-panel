@@ -1,5 +1,8 @@
-// RPC Owner / Worker Web Panel config
-// Change this if your backend URL changes.
-window.RPC_API_URL = window.RPC_API_URL || "https://rpc-team-crm.onrender.com";
-window.RPC_ORDER_SITE_URL = window.RPC_ORDER_SITE_URL || "https://rpc-order-website.onrender.com";
-window.RPC_CLIENT_PORTAL_URL = window.RPC_CLIENT_PORTAL_URL || "https://rpc-client-portal.onrender.com";
+// RPC Team CRM Web Panel config
+// Change this only if your backend URL is different.
+window.RPC_CONFIG = {
+  API_URL: "https://rpc-team-crm.onrender.com",
+  PANEL_NAME: "RPC Team CRM",
+  AVATAR: "rpc-avatar.png",
+  REFRESH_MS: 5000
+};
